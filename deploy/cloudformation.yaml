@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+    UserData:
+      Type: String
+Resources:
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: eps-blog
+      Port: 8080
+      Protocol: HTTP
+      VpcId: vpc-65ee5c1d
+  ASG:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: eps-blog
+      AvailabilityZones:
+        - us-east-1a
+      MaxSize: 2
+      MinSize: 1
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      TargetGroupARNs:
+        - !Ref TargetGroup
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Arn: arn:aws:iam::269181795553:instance-profile/eps-main-instance-role
+        UserData: !Ref UserData
+        InstanceType: t2.micro
+        ImageId: ami-090fa75af13c156b4
+        KeyName: eps-main-front
+        SecurityGroupIds:
+          - sg-0a8629256b12f4030
+      LaunchTemplateName: BlogLaunchTemplate
