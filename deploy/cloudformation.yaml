@@ -36,3 +36,7 @@ Resources:
         SecurityGroupIds:
           - sg-0a8629256b12f4030
       LaunchTemplateName: BlogLaunchTemplate
+  BlogImagesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: eps-blog-images

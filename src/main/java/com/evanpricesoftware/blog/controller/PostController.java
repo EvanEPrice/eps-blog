@@ -17,7 +17,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/post/${postId}")
+    @GetMapping("/post/{postId}")
     public Post test(@RequestParam("postId")int postId){
         return postService.get(postId);
     }
